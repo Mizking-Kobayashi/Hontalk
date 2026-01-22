@@ -25,13 +25,21 @@ test:
 # is mounted as a persistent Docker volume in config/deploy.yml.
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
-  databases:
-    main:
-      url: <%= ENV["DATABASE_URL"] %>
-    cable:
-      url: <%= ENV["DATABASE_URL"] %>
-    cache:
-      url: <%= ENV["DATABASE_URL"] %>
-    queue:
-      url: <%= ENV["DATABASE_URL"] %>
+  # メインのデータベース設定
+  primary: &primary_production
+    url: <%= ENV["DATABASE_URL"] %>
+  
+  # Solid Cable (Action Cable) 用の設定
+  cable:
+    <<: *primary_production
+    migrations_paths: db/cable_migrate
+
+  # Solid Cache 用の設定
+  cache:
+    <<: *primary_production
+    migrations_paths: db/cache_migrate
+
+  # Solid Queue (Active Job) 用の設定
+  queue:
+    <<: *primary_production
+    migrations_paths: db/queue_migrate
