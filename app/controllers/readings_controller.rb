@@ -4,8 +4,8 @@ class ReadingsController < ApplicationController
 
   def index
     @readings = current_user.readings.order(created_at: :desc)
-    @total_hours = current_user.total_reading_hours         #ユーザー側のメソッドを呼び出す
-    @avg_minutes = current_user.average_reading_minutes     #ユーザー側のメソッドを呼び出す
+    @total_hours = current_user.total_reading_hours         # ユーザー側のメソッドを呼び出す
+    @avg_minutes = current_user.average_reading_minutes     # ユーザー側のメソッドを呼び出す
   end
 
   # これ以降の部分はgemini

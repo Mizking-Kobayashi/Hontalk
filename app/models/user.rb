@@ -22,7 +22,7 @@ class User < ApplicationRecord
   def average_reading_minutes
     completed_readings = readings.where.not(end_at: nil)
     return 0 if completed_readings.empty?
-    
+
     total_minutes = completed_readings.sum(&:duration_minutes)
     (total_minutes / completed_readings.count).to_i
   end

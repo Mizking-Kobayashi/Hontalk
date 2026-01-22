@@ -3,7 +3,7 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    #作成された日時によって順番を並び替え
+    # 作成された日時によって順番を並び替え
     @posts = current_user.posts.order(created_at: :desc)
     @post = Post.new
   end

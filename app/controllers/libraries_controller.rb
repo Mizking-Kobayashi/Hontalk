@@ -1,5 +1,5 @@
-require 'net/http'
-require 'json'
+require "net/http"
+require "json"
 
 class LibrariesController < ApplicationController
   before_action :set_library, only: %i[ show edit update destroy ]

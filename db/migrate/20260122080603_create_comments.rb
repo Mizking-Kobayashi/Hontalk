@@ -4,7 +4,7 @@ class CreateComments < ActiveRecord::Migration[8.1]
       # t.references を使うと自動的に user_id カラムとインデックスが作られます
       t.references :user, null: false, foreign_key: true
       t.references :post, null: false, foreign_key: true
-      
+
       # 本文。長いコメントも想定して string より text がおすすめ
       t.text :body, null: false
 

@@ -12,9 +12,8 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     # サインアップ時に unique_name を許可
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:unique_name, :name, :avatar])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :unique_name, :name, :avatar ])
     # アカウント更新時に unique_name を許可
-    devise_parameter_sanitizer.permit(:account_update, keys: [:unique_name, :name, :avatar])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :unique_name, :name, :avatar ])
   end
-  
 end
