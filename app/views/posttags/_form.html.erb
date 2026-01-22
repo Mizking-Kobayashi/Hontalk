@@ -1,0 +1,27 @@
+<%= form_with(model: posttag) do |form| %>
+  <% if posttag.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(posttag.errors.count, "error") %> prohibited this posttag from being saved:</h2>
+
+      <ul>
+        <% posttag.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :post_id, style: "display: block" %>
+    <%= form.number_field :post_id %>
+  </div>
+
+  <div>
+    <%= form.label :tag_id, style: "display: block" %>
+    <%= form.number_field :tag_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

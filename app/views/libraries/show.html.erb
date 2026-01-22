@@ -1,0 +1,81 @@
+<%# 通知メッセージの表示 %>
+<% if notice %>
+  <p class="max-w-4xl mx-auto text-green-600 font-medium mb-4 px-4"><%= notice %></p>
+<% end %>
+
+
+<div class="flex items-center h-14 px-4 bg-white/80 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
+  <%= link_to libraries_path, class: "p-2 rounded-full hover:bg-gray-100 transition text-gray-700" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+  <% end %>
+  <h1 class="ml-4 text-xl font-bold text-gray-900">書籍情報</h1>
+</div>
+
+<%# 
+  Stimulusコントローラーを紐付け。
+  コントローラー名が book_search_controller.js なら "book-search" に。
+  apiKeyValue に Google Books の ID を渡す。
+%>
+<div class="max-w-4xl mx-auto bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden mt-8"
+     data-controller="book-loader"
+     data-book-loader-api-key-value="<%= @library.api_str %>">
+  
+  <div class="md:flex">
+    
+    <%# 左側：書影エリア（thumbnail target） %>
+    <div data-book-loader-target="thumbnail" 
+         class="md:w-1/3 bg-gray-50 flex items-center justify-center p-8 border-b md:border-b-0 md:border-r border-gray-100 min-h-[350px]">
+      <%# API取得前：スケルトン表示 %>
+      <div class="animate-pulse bg-gray-200 w-48 h-72 rounded-lg shadow-md"></div>
+    </div>
+
+    <%# 右側：書籍情報エリア %>
+    <div class="md:w-2/3 p-8 flex flex-col justify-between">
+      <div>
+        <%# タイトル (title target) %>
+        <h1 data-book-loader-target="title" class="text-3xl font-extrabold text-gray-900 leading-tight mb-2">
+          <span class="animate-pulse bg-gray-200 h-8 w-3/4 block rounded"></span>
+        </h1>
+        
+        <%# 著者 (authors target) %>
+        <p data-book-loader-target="authors" class="text-lg text-blue-600 font-medium mb-6">
+          <span class="animate-pulse bg-gray-200 h-4 w-1/2 block rounded mt-2"></span>
+        </p>
+
+        <div class="prose prose-sm text-gray-600 max-w-none">
+          <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">書籍紹介</h2>
+          <%# 説明文 (description target) %>
+          <div data-book-loader-target="description" class="leading-relaxed whitespace-pre-wrap text-gray-700">
+             <span class="animate-pulse bg-gray-200 h-4 w-full block rounded mb-2"></span>
+             <span class="animate-pulse bg-gray-200 h-4 w-full block rounded mb-2"></span>
+             <span class="animate-pulse bg-gray-200 h-4 w-2/3 block rounded"></span>
+          </div>
+        </div>
+      </div>
+
+      <%# 下部：アクションボタン %>
+      <div class="mt-10 pt-6 border-t border-gray-100 flex flex-wrap items-center gap-4">
+        
+        <%# 削除ボタン（左側） %>
+        <div>
+          <%= button_to @library, method: :delete, data: { confirm: "本当に削除しますか？" }, class: "text-xs text-red-400 hover:text-red-600 transition font-medium" do %>
+            削除する
+          <% end %>
+        </div>
+
+        <%# 一覧へ戻るボタン（右側） %>
+        <div class="ml-auto">
+          <%= link_to libraries_path, class: "inline-flex items-center px-5 py-2.5 bg-gray-100 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-200 transition shadow-sm" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            一覧へ戻る
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<% content_for :title, "読書記録" %>
+
+<%# この辺はgemini頼り %>
+<%# 1. ヘッダー %>
+<div class="flex items-center h-14 px-4 bg-white/80 backdrop-blur-md sticky top-0 z-20 border-b border-gray-100">
+  <h1 class="ml-4 text-xl font-bold text-gray-900">読書記録</h1>
+</div>
+
+<div class="max-w-2xl mx-auto w-full border-x border-gray-100 min-h-screen bg-white">
+  
+  <%# 2. 統計セクション %>
+  <div class="p-6 bg-gradient-to-b from-blue-50/50 to-white border-b border-gray-100">
+    <div class="grid grid-cols-2 gap-4">
+      <%# 総読書時間 %>
+      <div class="bg-white p-4 rounded-2xl border border-blue-100 shadow-sm transition hover:shadow-md">
+        <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1 flex items-center">
+          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Total Time
+        </p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-3xl font-black text-gray-900 tracking-tighter"><%= @total_hours %></span>
+          <span class="text-xs font-bold text-gray-500 uppercase">hours</span>
+        </div>
+      </div>
+      
+      <%# 平均読書時間 %>
+      <div class="bg-white p-4 rounded-2xl border border-blue-100 shadow-sm transition hover:shadow-md">
+        <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1 flex items-center">
+          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          Avg / Session
+        </p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-3xl font-black text-gray-900 tracking-tighter"><%= @avg_minutes %></span>
+          <span class="text-xs font-bold text-gray-500 uppercase">mins</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# 3. 記録リスト %>
+  <div class="flex flex-col">
+    <% if @readings.any? %>
+      <% @readings.each do |reading| %>
+        <div class="p-4 border-b border-gray-50 hover:bg-gray-50/80 transition duration-200 group">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-4">
+              <%# 日付バッジ %>
+              <div class="flex flex-col items-center justify-center w-12 h-12 bg-white rounded-xl border border-gray-100 flex-shrink-0 shadow-sm group-hover:border-blue-200 transition-colors">
+                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter leading-none mb-1">
+                  <%= l reading.start_at, format: "%b" %>
+                </span>
+                <span class="text-lg font-black text-gray-800 leading-none">
+                  <%= reading.start_at.day %>
+                </span>
+              </div>
+
+              <div class="min-w-0">
+                <%# 読書時間帯 %>
+                <div class="flex items-center gap-2">
+                  <span class="text-[15px] font-bold text-gray-900 tracking-tight">
+                    <%= l reading.start_at, format: "%H:%M" %> 
+                    <span class="text-gray-300 font-normal mx-0.5">→</span> 
+                    
+                    <%# エラー回避：終了時間がある場合のみ表示 %>
+                    <% if reading.end_at.present? %>
+                      <%= l reading.end_at, format: "%H:%M" %>
+                    <% else %>
+                      <span class="text-blue-500 animate-pulse text-sm">読書中...</span>
+                    <% end %>
+                  </span>
+
+                  <%# バッジの切り替え %>
+                  <% if reading.end_at.present? %>
+                    <span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black rounded-lg border border-blue-100">
+                      <%= reading.duration_minutes %> MIN
+                    </span>
+                  <% else %>
+                    <span class="px-2 py-0.5 bg-amber-50 text-amber-600 text-[10px] font-black rounded-lg border border-amber-100">
+                      MEASURING
+                    </span>
+                  <% end %>
+                </div>
+                <div class="text-[11px] text-gray-400 font-medium mt-0.5">
+                  <%= l reading.start_at, format: :short %> に開始
+                </div>
+              </div>
+            </div>
+
+            <%# 削除ボタン %>
+            <div class="flex-shrink-0 ml-4">
+              <%= button_to reading_path(reading), 
+                  method: :delete, 
+                  class: "opacity-0 group-hover:opacity-100 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200 active:scale-90",
+                  data: { turbo_confirm: "この読書記録を削除しますか？" } do %>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <%# データがない時の空状態表示 %>
+      <div class="py-20 flex flex-col items-center justify-center text-gray-400">
+        <svg class="w-16 h-16 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <p class="font-bold">まだ読書記録がありません</p>
+        <p class="text-xs mt-1">サイドバーの「記録を開始する」から始めましょう！</p>
+      </div>
+    <% end %>
+  </div>
+</div>

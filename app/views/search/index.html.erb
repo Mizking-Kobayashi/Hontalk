@@ -1,0 +1,27 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Posts" %>
+
+<div class="flex items-center h-14 px-4 bg-white/80 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
+  <h1 class="ml-4 text-xl font-bold text-gray-900">書籍検索</h1>
+</div>
+
+<div id="posts" class="w-full mx-auto">
+  <div class="flex flex-col border-t border-gray-100">
+    <%# 検索フォームのレンダリング %>
+    <%= render "form" %>
+
+    <%# params[:q] が存在する場合のみ、Stimulusを起動させる %>
+    <% if params[:q].present? %>
+      <div data-controller="book-search" data-book-search-query-value="<%= params[:q] %>">
+        <div data-book-search-target="results" class="max-w-2xl mx-auto px-4 py-6">
+          <p class="text-center text-gray-400 animate-pulse">「<%= params[:q] %>」を検索中...</p>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-20 text-gray-500">
+        <p>キーワードを入力して本を探してみましょう</p>
+      </div>
+    <% end %>
+  </div>
+</div>

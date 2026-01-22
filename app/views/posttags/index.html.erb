@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Posttags" %>
+
+<h1>Posttags</h1>
+
+<div id="posttags">
+  <% @posttags.each do |posttag| %>
+    <%= render posttag %>
+    <p>
+      <%= link_to "Show this posttag", posttag %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New posttag", new_posttag_path %>

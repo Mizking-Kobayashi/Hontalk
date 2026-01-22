@@ -1,0 +1,49 @@
+<%= form_for(current_user, as: :user, url: registration_path(:user), html: { method: :put, class: "space-y-6" }) do |f| %>
+  <%# エラーメッセージ表示 %>
+  <%= render "devise/shared/error_messages", resource: current_user %>
+
+  <div class="space-y-4">
+    <div>
+      <%= f.label :avatar, "プロフィール画像", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.file_field :avatar, accept: 'image/jpg,image/jpeg,image/png',
+          class: "block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-xl file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-green-50 file:text-green-700
+                  hover:file:bg-green-100" %>
+    </div>
+    
+    <div>
+      <%= f.label :name, "表示名", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :name, placeholder: "読書 太郎",
+          class: "block w-full px-4 py-3 rounded-xl border-gray-200 focus:ring-green-500 focus:border-green-500 bg-gray-50 text-sm transition" %>
+    </div>
+
+    <div>
+      <%= f.label :unique_name, "ユーザーID (@から始まる英数字)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :unique_name, placeholder: "book_lover_77",
+          class: "block w-full px-4 py-3 rounded-xl border-gray-200 focus:ring-green-500 focus:border-green-500 bg-gray-50 text-sm transition" %>
+    </div>
+
+    <div>
+      <%= f.label :email, "メールアドレス", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.email_field :email, autocomplete: "email",
+          class: "block w-full px-4 py-3 rounded-xl border-gray-200 focus:ring-green-500 focus:border-green-500 bg-gray-50 text-sm transition" %>
+    </div>
+
+    <hr class="border-gray-100 my-6">
+
+    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+      <%= f.label :current_password, "現在のパスワード", class: "block text-sm font-bold text-amber-800 mb-1" %>
+      <p class="text-xs text-amber-700 mb-3">設定を変更するには現在のパスワードを入力してください</p>
+      <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "••••••••",
+          class: "block w-full px-4 py-3 rounded-xl border-amber-200 focus:ring-amber-500 focus:border-amber-500 bg-white text-sm transition" %>
+    </div>
+  </div>
+
+  <div class="pt-2">
+    <%= f.submit "変更を保存する", 
+        class: "w-full py-4 px-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl transition duration-200 shadow-lg shadow-green-100 flex items-center justify-center space-x-2" %>
+  </div>
+<% end %>

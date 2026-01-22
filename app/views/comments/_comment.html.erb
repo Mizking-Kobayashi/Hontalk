@@ -1,0 +1,19 @@
+<div class="p-4 border-b border-gray-50 flex gap-3 hover:bg-gray-50/30 transition">
+  <div class="flex-shrink-0">
+    <div class="h-10 w-10 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-100">
+      <% if comment.user&.avatar&.attached? %>
+        <%= image_tag comment.user.avatar, class: "h-full w-full object-cover" %>
+      <% else %>
+         <span class="text-gray-400 font-bold text-xs"><%= (comment.user&.name.presence || "U")[0].upcase %></span>
+      <% end %>
+    </div>
+  </div>
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-1 mb-1">
+      <span class="font-bold text-gray-900 text-sm"><%= comment.user&.name %></span>
+      <span class="text-gray-500 text-xs">@<%= comment.user&.unique_name %></span>
+      <span class="text-gray-400 text-xs">· <%= time_ago_in_words(comment.created_at) %>前</span>
+    </div>
+    <div class="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap"><%= comment.body %></div>
+  </div>
+</div>

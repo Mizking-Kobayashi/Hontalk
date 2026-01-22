@@ -1,0 +1,51 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Libraries" %>
+
+<div class="flex items-center h-14 px-4 bg-white/80 backdrop-blur-sm sticky top-0 z-10 border-b border-gray-100">
+  <h1 class="ml-4 text-xl font-bold text-gray-900">ライブラリ</h1>
+</div>
+
+<script>
+  async function setBookInfo(key, id) {
+    const volumeId = key;
+    const url = `https://www.googleapis.com/books/v1/volumes/${volumeId}`;
+
+    try {
+      //Fetch API使って対応するkeyの本情報を取得
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTPエラー: ${response.status}`);
+      }
+
+      const data = await response.json();
+      document.getElementById("title_" + id).innerHTML = data.volumeInfo.title
+      document.getElementById("authors_" + id).innerHTML = data.volumeInfo.authors
+      document.getElementById("thumbnail_" + id).innerHTML = '<img class="w-full h-full object-cover" src="' + data.volumeInfo.imageLinks.thumbnail + '">'
+    } catch (error) {
+      console.error("データの取得に失敗しました:", error);
+    }
+  }
+</script>
+  
+<!-- ここのデザインはgeminiによるAI生成 -->
+<div id="libraries">
+  <div class="flex flex-wrap">
+  <% @libraries.each do |library| %>
+    <div class="group text-center w-1/5 p-2" id="book_<%= library.id %>">
+      <div class="relative overflow-hidden shadow-lg border border-gray-200 rounded-xl bg-black"> 
+        <%= link_to library do %>
+          <div id="thumbnail_<%= library.id %>" class="aspect-[3/4] w-full transition duration-300 group-hover:opacity-50"></div>
+          
+          <div class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <div class="text-white font-bold text-sm line-clamp-3" id="title_<%= library.id %>"></div>
+            <div class="text-gray-300 text-xs mt-2 truncate w-full" id="authors_<%= library.id %>"></div>
+          </div>
+        <% end %>
+      </div>
+      <script> setBookInfo("<%= library.api_str %>", <%= library.id %>) </script>
+    </div>
+  <% end %>
+  </div>
+</div>

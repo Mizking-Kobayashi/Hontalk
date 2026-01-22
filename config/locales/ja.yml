@@ -1,0 +1,5 @@
+# config/locales/ja.yml
+ja:
+  time:
+    formats:
+      short: "%m月%d日 %H:%M"

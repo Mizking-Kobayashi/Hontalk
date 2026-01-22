@@ -1,0 +1,95 @@
+<% content_for :title, "ポスト詳細" %>
+
+<%# 1. ヘッダー部分 %>
+<div class="flex items-center h-14 px-4 bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-gray-100">
+  <%= link_to :back, class: "p-2 rounded-full hover:bg-gray-100 transition text-gray-700" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+  <% end %>
+  <h1 class="ml-4 text-xl font-bold text-gray-900">ポスト</h1>
+</div>
+
+<div id="posts" class="max-w-2xl mx-auto w-full border-x border-gray-100 min-h-screen bg-white shadow-sm">
+  <div class="flex flex-col">
+    <%# メインポストセクション %>
+    <article class="p-4 bg-white">
+      <div class="flex gap-3 mb-4">
+        <div class="flex-shrink-0">
+          <div class="h-12 w-12 rounded-full overflow-hidden bg-sky-50 flex items-center justify-center border border-gray-100 shadow-sm">
+            <% if @post.user.avatar.attached? %>
+              <%= image_tag @post.user.avatar, class: "h-full w-full object-cover" %>
+            <% else %>
+              <span class="text-sky-600 font-bold text-lg">
+                <%= (@post.user.name.presence || @post.user.unique_name)[0].upcase %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-col">
+            <span class="font-bold text-gray-900 text-[16px]"><%= @post.user.name %></span>
+            <span class="text-sm text-gray-500">@<%= @post.user.unique_name %></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-xl font-extrabold text-gray-900 leading-tight">
+          <%= @post.title %>
+        </h2>
+        <p class="text-[17px] text-gray-800 leading-relaxed whitespace-pre-wrap break-words">
+          <%= @post.body %>
+        </p>
+        
+        <div class="text-sm text-gray-500 py-2 border-b border-gray-50">
+          <%= l @post.created_at, format: :long %>
+        </div>
+      </div>
+
+      <%# 書籍カード %>
+      <div class="mt-4">
+        <%= link_to "/search/show/#{@post.library&.api_str}", class: "block group" do %>
+          <div class="border border-gray-200 rounded-2xl overflow-hidden flex h-32 hover:border-sky-200 hover:bg-sky-50/30 transition duration-200 shadow-sm bg-gray-50/50"
+              data-controller="book-loader" 
+              data-book-loader-api-key-value="<%= @post.library&.api_str %>">
+            
+            <div data-book-loader-target="thumbnail" 
+                class="w-24 sm:w-28 flex-shrink-0 bg-gray-100 border-r border-gray-100 overflow-hidden flex items-center justify-center">
+            </div>
+
+            <div class="p-3 flex flex-col justify-center flex-1 min-w-0">
+              <div data-book-loader-target="title" class="text-sky-600 text-sm font-bold truncate"></div>
+              <div data-book-loader-target="authors" class="text-gray-900 text-xs font-bold truncate mt-1"></div>
+              <div data-book-loader-target="description" class="text-gray-500 text-[11px] line-clamp-2 mt-1 leading-tight"></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <%# アクションエリア（削除ボタン） %>
+      <div class="py-2 flex justify-end">
+        <% if @post.user == current_user %>
+          <%= button_to @post, method: :delete, 
+              class: "text-red-500 hover:bg-red-50 p-2 rounded-full transition group",
+              data: { confirm: "このポストを削除しますか？" } do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          <% end %>
+        <% end %>
+      </div>
+    </article>
+
+    <%# 2. 返信フォーム（境界線を太めにして区切りを強調） %>
+    <div class="border-y border-gray-100 bg-white">
+      <%= render "comments/form" %>
+    </div>
+    
+    <%# 3. コメント一覧 %>
+    <div id="comments" class="bg-white">
+      <%= render @post.comments.order(created_at: :desc) %>
+    </div>
+  </div>
+</div>

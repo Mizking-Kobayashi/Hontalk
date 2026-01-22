@@ -1,0 +1,32 @@
+<div class="py-6 px-4 border-t border-gray-100">
+  <div class="flex gap-3">
+    <%# ログインユーザーのアバター %>
+    <div class="flex-shrink-0">
+      <div class="h-10 w-10 rounded-full overflow-hidden bg-blue-50 flex items-center justify-center border border-gray-100 shadow-sm">
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar, class: "h-full w-full object-cover" %>
+        <% else %>
+          <span class="text-blue-600 font-bold text-sm">
+            <%= (current_user.name.presence || current_user.unique_name)[0].upcase %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+
+    <%# 入力フォーム %>
+    <div class="flex-1">
+      <%= form_with(model: [ @post, Comment.new ], local: true, class: "w-full") do |f| %>
+        <%= f.text_area :body, 
+            placeholder: "返信をポスト...", 
+            rows: 2,
+            class: "w-full border-none p-0 text-lg focus:ring-0 placeholder-gray-500 resize-none bg-transparent",
+            required: true %>
+        
+        <div class="flex justify-end mt-2 pt-2 border-t border-gray-50">
+          <%= f.submit "返信", 
+              class: "bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-5 rounded-full cursor-pointer transition duration-200 text-sm shadow-md shadow-sky-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

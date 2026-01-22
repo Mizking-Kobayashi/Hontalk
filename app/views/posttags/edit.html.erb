@@ -1,0 +1,12 @@
+<% content_for :title, "Editing posttag" %>
+
+<h1>Editing posttag</h1>
+
+<%= render "form", posttag: @posttag %>
+
+<br>
+
+<div>
+  <%= link_to "Show this posttag", @posttag %> |
+  <%= link_to "Back to posttags", posttags_path %>
+</div>
