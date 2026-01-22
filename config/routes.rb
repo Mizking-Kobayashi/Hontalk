@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :posts do
     resources :comments, only: [ :create ]
   end
-  resources :libraries, only: [ :index, :show ]
+  resources :libraries, only: [:index, :show, :create]
   resources :search, only: [ :index, :show ]
   resources :settings, only: [ :index ]
   resources :timeline, only: [ :index ]
