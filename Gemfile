@@ -46,7 +46,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
   gem "sqlite3", ">= 2.1"
-  
+
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)
   gem "bundler-audit", require: false
 
@@ -69,5 +69,5 @@ group :test do
 end
 
 group :production do
-  gem 'pg'
+  gem "sqlite3", ">= 2.1"
 end
